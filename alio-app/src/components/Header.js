@@ -10,10 +10,11 @@ const Header = () => {
         backgroundColor: "black",
         width: "100%",
         height: "80px",
-        paddingTop: "30px"
+        paddingTop: "10px",
+        paddingLeft: "20px"
       }}
     >
-      Fancim
+      <span>Fancim</span>
     </div>
   );
 };
