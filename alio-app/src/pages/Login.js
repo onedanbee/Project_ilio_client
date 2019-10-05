@@ -6,7 +6,6 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
   }
-
   componentDidMount() {
     if (this.props.logged_in) {
       fetch("http://localhost:8000/core/current_user/", {
@@ -27,15 +26,13 @@ class Login extends React.Component {
   handleChangePw = event => {
     this.setState({ loginPw: event.target.value });
   };
+
   handleClick = e => {
     const form = this.props.form;
     e.preventDefault();
 
     form.validateFields((err, values) => {
       if (!err) {
-        this.setState({
-          login: true
-        });
         fetch("http://localhost:8000/token-auth/", {
           method: "POST",
           headers: {
@@ -47,11 +44,17 @@ class Login extends React.Component {
           .then(json => {
             localStorage.setItem("token", json.token);
             this.setState({
-              logged_in: true,
               username: json.user.username
             });
+            return json;
+          })
+          .then(json => {
+            this.props.handleClick();
           });
       }
+      // setTimeout(() => {
+      //   this.props.handleClick();
+      // }, 300);
       console.log("뭐지", values);
       console.log(this.state.login);
     });
@@ -61,8 +64,6 @@ class Login extends React.Component {
     console.log(this.props.value);
     const form = this.props.form;
     const login = this.props.value.login;
-    console.log("login form ", form);
-    console.log("login value", login);
     return login ? (
       <Redirect to="/pages" />
     ) : (

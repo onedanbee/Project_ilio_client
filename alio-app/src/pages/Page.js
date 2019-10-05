@@ -7,8 +7,24 @@ import Bjdetails from "../components/Bjdetails";
 import Platform from "./Platform";
 
 class Page extends React.Component {
+  state = {
+    platform: "",
+    PlatformInClick: ""
+  };
+
+  PlatformClick = event => {
+    console.log("platform click 눌렀어용");
+    this.setState({
+      platform: event.item.props.platformName,
+      PlatformInClick: event.item.props.soMenu
+    });
+    console.log(this.state);
+    console.log("이벤트", event);
+  };
+
   render() {
     console.log(this.props);
+    console.log(this.state);
     return (
       <div>
         <Router>
@@ -16,7 +32,10 @@ class Page extends React.Component {
             <div style={{ width: "200px", float: "left" }}>
               <SiderForm
                 style={{ overflow: "hidden" }}
-                propsdata={this.props}
+                propsdata={this.props.value}
+                handle_logout={this.props.handle_logout}
+                clickData={this.state}
+                PlatformClick={this.PlatformClick}
               />
             </div>
             <div
@@ -29,7 +48,11 @@ class Page extends React.Component {
             >
               <Switch>
                 <Route exact path="/pages" component={Main} />
-                <Route exact path="/pages/platfrom" component={Platform} />
+                <Route
+                  exact
+                  path="/pages/platfrom"
+                  render={() => <Platform clickData={this.state} />}
+                />
                 <Route path="/pages/:id" component={Bjdetails} />
               </Switch>
             </div>

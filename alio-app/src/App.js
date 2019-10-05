@@ -1,37 +1,57 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import WrappedLogin from "./pages/Login";
 import Header from "./components/Header";
 import Page from "./pages/Page";
 
 class App extends React.Component {
-  state = {
-    login: false,
-    //logged_in: localStorage.getItem("token") ? true : false,
-    logged_in: localStorage.token !== "undefined" ? true : false,
-    username: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      // login: false,
+      // logged_in: localStorage.getItem("token") ? true : false,
+      login: false, //(undefined면 / true 로그인이 안된상태)
+      username: ""
+    };
+  }
 
   handle_logout = () => {
     localStorage.removeItem("token");
-    this.setState({ logged_in: false, username: "" });
+    this.state.login = false;
+    this.setState({ username: "" });
   };
+
+  handleClick = () => {
+    this.setState({ login: localStorage.token !== undefined, username: "" });
+  };
+
   render() {
-    console.log("app state login", this.state.login);
     return (
       <div>
         <Header />
+        {console.log(this.state.login)}
         <Router>
+          {this.state.login ? (
+            <Route
+              path="/pages"
+              render={props => (
+                <Page value={this.state} handle_logout={this.handle_logout} />
+              )}
+            />
+          ) : (
+            <Redirect to="/" />
+          )}
           <Route
             exact
             path="/"
-            render={props => <WrappedLogin value={this.state} />}
+            render={props => (
+              <WrappedLogin handleClick={this.handleClick} value={this.state} />
+            )}
             // component={WrappedLogin}
-            // logged_in={this.state.logged_in}
+            // login={this.state.login}
             // login={this.state.login}
             // username={this.state.username}
           />
-          <Route path="/pages" render={props => <Page value={this.state} />} />
         </Router>
       </div>
     );
