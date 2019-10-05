@@ -5,13 +5,21 @@ import { fakeData } from "../sub_data";
 import { afreecaFakedata } from "../afreeca_moca";
 import { Table, Button } from "antd";
 const { Column } = Table;
+import { getData } from "../util/getData";
 //import * as XLSX from "xlsx";
 
 class Bjdetails extends Component {
+  state = {
+    bjinfo: []
+  };
+  async componentDidMount() {
+    await getData("main/", data => this.setState({ bjinfo: data }));
+  }
   render(props) {
     console.log(this.props.match.params.id);
     let userName = this.props.match.params.id;
     console.log("Hi Bjdetail", fakeData);
+    console.log("bjdetail: this.state", this.state);
     var resultarr = [];
     for (let i = 0; i < fakeData.length; i++) {
       if (fakeData[i]["user_name"] === userName)

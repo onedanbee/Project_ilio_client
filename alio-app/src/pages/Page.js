@@ -5,12 +5,19 @@ import Main from "../pages/Main";
 import { Layout } from "antd";
 import Bjdetails from "../components/Bjdetails";
 import Platform from "./Platform";
+import { getData } from "../util/getData";
 
 class Page extends React.Component {
   state = {
     platform: "",
     PlatformInClick: ""
   };
+
+  componentDidMount() {
+    getData("main/", data => {
+      console.log(data);
+    });
+  }
 
   PlatformClick = event => {
     console.log("platform click 눌렀어용");

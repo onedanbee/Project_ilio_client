@@ -9,8 +9,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       // login: false,
-      // logged_in: localStorage.getItem("token") ? true : false,
-      login: false, //(undefined면 / true 로그인이 안된상태)
+      // logged_in:
+      login: localStorage.getItem("token") ? true : false, //(undefined면 / true 로그인이 안된상태)
       username: ""
     };
   }
@@ -26,6 +26,7 @@ class App extends React.Component {
   };
 
   render() {
+    console.log(localStorage.token);
     return (
       <div>
         <Header />
