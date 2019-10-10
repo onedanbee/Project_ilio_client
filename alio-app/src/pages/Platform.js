@@ -1,51 +1,40 @@
 import React, { Component } from "react";
-import { fakeData } from "../sub_data";
 import { Button, Table } from "antd";
 const { Column, ColumnGroup } = Table;
 
 class Platform extends Component {
   render(props) {
-    console.log(fakeData);
-    // var resultarr = [];
-    // for (let i = 0; i < fakeData.length; i++) {
-    //   if (fakeData[i]["user_name"])
-    //     resultarr.push({
-    //       view: fakeData[i]["view_count"]
-    //     });
-    // }
     console.log("data 알려조~", this.props);
 
     const data = [
       {
         key: "1",
-        firstName: "John",
-        lastName: "Brown",
+        preIncrease: 459,
+        currentIncrease: 1495,
         Rank: 1,
-        BJName: "New York No. 1 Lake Park",
-        SubIncrease: "30"
+        BJName: "견자희",
+        SubIncrease: 1036
       },
       {
         key: "2",
-        firstName: "Jim",
-        lastName: "Green",
+        preIncrease: 600,
+        currentIncrease: 930,
         Rank: 2,
-        BJName: "London No. 1 Lake Park",
-        SubIncrease: "40"
+        BJName: "공대생 감자",
+        SubIncrease: 330
       },
       {
         key: "3",
-        firstName: "Joe",
-        lastName: "Black",
+        preIncrease: 6045,
+        currentIncrease: 6094,
         Rank: 3,
-        BJName: "Sidney No. 1 Lake Park",
-        SubIncrease: "95"
+        BJName: "의정부 불곰",
+        SubIncrease: "49"
       }
     ];
     return (
-      <div
-        style={{ width: "1000px", height: "1000px", border: "1px solid red" }}
-      >
-        <div style={{ border: "1px solid blue", padding: "30px 0 30px 20px" }}>
+      <div style={{ width: "1000px", height: "1000px" }}>
+        <div style={{ padding: "30px 0 30px 20px" }}>
           <span style={{ marginRight: "20px", width: "150px" }}>
             <Button>일 간</Button>
           </span>
@@ -67,11 +56,15 @@ class Platform extends Component {
               key="SubIncrease"
             />
             <ColumnGroup title="구독자 수">
-              <Column title="증가 전" dataIndex="firstName" key="firstName" />
+              <Column
+                title="증가 전"
+                dataIndex="preIncrease"
+                key="preIncrease"
+              />
               <Column
                 title="증가 후(현재)"
-                dataIndex="lastName"
-                key="lastName"
+                dataIndex="currentIncrease"
+                key="currentIncrease"
               />
             </ColumnGroup>
           </Table>

@@ -1,31 +1,47 @@
 import React, { Component } from "react";
-import { fakeData } from "../sub_data";
 import { Link } from "react-router-dom";
 import { Table, Input, Button, Icon } from "antd";
 import Highlighter from "react-highlight-words";
-
-// fetch()
-//   .then(res => res)
-//   .then(data => {
-//     console.log("data", data.json());
-//   });
-console.log(fakeData);
-const data = [];
-for (let i = 0; i < fakeData.length; i++) {
-  var bjdata = {
-    key: fakeData[i]["id"],
-    name: fakeData[i]["user_name"],
-    subafreeca: fakeData[i]["afreeca_fanclub"],
-    subtwitch: fakeData[i]["twitch_sub"],
-    subyoutube: fakeData[i]["youtube_sub"]
-  };
-  data.push(bjdata);
-}
+import { getData } from "../util/getData";
 
 class Main extends Component {
   state = {
-    searchText: ""
+    searchText: "",
+    bjinfo: [],
+    bjFilterInfo: []
   };
+
+  async componentDidMount() {
+    await getData("main/", bjdata => this.setState({ bjinfo: bjdata }));
+    this.bjDataFilter();
+  }
+  bjDataFilter() {
+    let bjinfo = this.state.bjinfo;
+    let bjInfoArr = [];
+    let bjInfoObj = {};
+    for (let k = 0; k < bjinfo.length; k++) {
+      let existenceUserkey = false;
+      let platformName = bjinfo[k]["P_name"];
+      let platformName_sub = platformName + "_sub";
+      for (let i = 0; i < bjInfoArr.length; i++) {
+        if (bjInfoArr[i]["id"] === bjinfo[k]["P_userkey"]) {
+          existenceUserkey = true;
+          bjInfoObj[platformName_sub] = bjinfo[k]["Sub"][0]["S_count"];
+        }
+      }
+      if (existenceUserkey === false) {
+        bjInfoObj = {
+          id: bjinfo[k]["P_userkey"],
+          user_name: bjinfo[k]["User"][0]["U_name"]
+        };
+        bjInfoObj[platformName_sub] = bjinfo[k]["Sub"][0]["S_count"];
+        bjInfoArr.push(bjInfoObj);
+      }
+    }
+    this.setState({
+      bjFilterInfo: bjInfoArr
+    });
+  }
 
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({
@@ -79,14 +95,12 @@ class Main extends Component {
       }
     },
     render: text => (
-      // <Link to="/:${this.state.bjname}">
       <Highlighter
         highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
         searchWords={[this.state.searchText]}
         autoEscape
         textToHighlight={text.toString()}
       />
-      // </Link>
     )
   });
 
@@ -103,31 +117,41 @@ class Main extends Component {
     const columns = [
       {
         title: "BJ Name",
-        dataIndex: "name",
-        key: "name",
+        dataIndex: "user_name",
+        key: "user_name",
         width: "20%",
-        ...this.getColumnSearchProps("name"),
+        ...this.getColumnSearchProps("user_name"),
         render: (text, record) => (
-          <Link to={"pages/" + record.name}>{text}</Link>
-          // <a href="1">{text}</a>
+          <Link
+            to={"pages/" + record.id}
+            bjFilterInfo={this.state.bjFilterInfo}
+          >
+            {text}
+          </Link>
         )
       },
       {
         title: "Subscribe (YOUTUBE)",
-        dataIndex: "subafreeca",
-        key: "subafreeca",
+        dataIndex: "afreeca_sub",
+        key: "afreeca_sub",
         width: "24%"
       },
       {
         title: "Subscribe (TWITCH)",
-        dataIndex: "subtwitch",
-        key: "subtwitch",
+        dataIndex: "twitch_sub",
+        key: "twitch_sub",
         width: "23%"
       },
       {
         title: "Subscribe (AFREECA)",
-        dataIndex: "subyoutube",
-        key: "subafreeca",
+        dataIndex: "youtube_sub",
+        key: "youtube_sub",
+        width: "23%"
+      },
+      {
+        title: "User Number",
+        dataIndex: "id",
+        key: "id",
         width: "23%"
       }
     ];
@@ -136,13 +160,15 @@ class Main extends Component {
       <div
         style={{
           float: "left",
-          width: "100%",
-          height: "100%"
+          width: "1000px",
+          height: "1900px",
+          margin: "40px 0 0 30px"
         }}
       >
+        <h2 style={{ marginBottom: "30px" }}>BJ의 Subscribe</h2>
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.bjFilterInfo}
           pagination={{ pageSize: 30 }}
         />
       </div>

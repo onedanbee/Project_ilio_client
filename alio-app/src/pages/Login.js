@@ -1,11 +1,9 @@
+// eslint-disable-next-line
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Input, Button, Icon } from "antd";
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     if (this.props.logged_in) {
       fetch("http://localhost:8000/core/current_user/", {
@@ -52,23 +50,39 @@ class Login extends React.Component {
             this.props.handleClick();
           });
       }
-      // setTimeout(() => {
-      //   this.props.handleClick();
-      // }, 300);
-      console.log("뭐지", values);
-      console.log(this.state.login);
     });
   };
 
   render() {
-    console.log(this.props.value);
     const form = this.props.form;
     const login = this.props.value.login;
     return login ? (
       <Redirect to="/pages" />
     ) : (
       <div>
-        <Form className="login-form" onSubmit={this.handleClick}>
+        <Form
+          className="login-form"
+          onSubmit={this.handleClick}
+          style={{
+            width: "300px",
+            height: "50%",
+            margin: "0 auto",
+            marginTop: "150px",
+            paddingTop: "20px",
+            background: "#F5F5F5",
+            borderRadius: "16px",
+            padding: "20px"
+          }}
+        >
+          <div
+            style={{
+              paddingBottom: "20px",
+              fontSize: "25px",
+              marginLeft: "10px"
+            }}
+          >
+            Admin Login
+          </div>
           <Form.Item>
             {form.getFieldDecorator("username", {
               rules: [
@@ -79,7 +93,6 @@ class Login extends React.Component {
                 id="username"
                 compact="true"
                 name="username"
-                style={{ width: "50%" }}
                 prefix={
                   <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
@@ -99,7 +112,6 @@ class Login extends React.Component {
               <Input.Password
                 compact="true"
                 name="password"
-                style={{ width: "50%" }}
                 prefix={
                   <Icon type="key" style={{ color: "rgba(0,0,0,.25)" }} />
                 }
@@ -108,7 +120,12 @@ class Login extends React.Component {
             )}
           </Form.Item>
           <Form.Item>
-            <Button htmlType="submit" style={{ margin: "3px 3px 3px 3px" }}>
+            <Button
+              htmlType="submit"
+              style={{
+                marginLeft: "95px"
+              }}
+            >
               Login
             </Button>
           </Form.Item>

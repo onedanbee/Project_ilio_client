@@ -1,41 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-// import { Layout } from "antd";
-// import SiderContents from './SiderContents';
 import { Menu, Layout, Button } from "antd";
 const { Sider } = Layout;
 
 const { SubMenu } = Menu;
 
 class SiderForm extends Component {
-  constructor(props) {
-    super(props);
-  }
-  /*여기서 api를 받아온다 . 그러면 
-  {
-    twitch: {
-      sub:
-      like:
-      comment:
-    },
-    afreeca: {
-      sub:
-      like:
-      comment:
-    },
-    youtube: {
-      sub:
-      like:
-      comment:
-    }
-  }
-  */
-
   render() {
-    console.log("sideform의 아이들", this.props);
     return (
       <div style={{ height: "100%" }}>
-        <Sider width={200} style={{ background: "#black", height: "100%" }}>
+        <Sider width={200} style={{ background: "black", height: "100%" }}>
           <Menu
             defaultSelectedKeys={["1"]}
             mode="inline"

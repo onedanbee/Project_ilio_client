@@ -5,7 +5,6 @@ import Main from "../pages/Main";
 import { Layout } from "antd";
 import Bjdetails from "../components/Bjdetails";
 import Platform from "./Platform";
-import { getData } from "../util/getData";
 
 class Page extends React.Component {
   state = {
@@ -13,25 +12,14 @@ class Page extends React.Component {
     PlatformInClick: ""
   };
 
-  componentDidMount() {
-    getData("main/", data => {
-      console.log(data);
-    });
-  }
-
   PlatformClick = event => {
-    console.log("platform click 눌렀어용");
     this.setState({
       platform: event.item.props.platformName,
       PlatformInClick: event.item.props.soMenu
     });
-    console.log(this.state);
-    console.log("이벤트", event);
   };
 
   render() {
-    console.log(this.props);
-    console.log(this.state);
     return (
       <div>
         <Router>
@@ -50,7 +38,8 @@ class Page extends React.Component {
                 float: "left",
                 position: "relative",
                 left: "0px",
-                height: "100%"
+                height: "100%",
+                width: "100%"
               }}
             >
               <Switch>

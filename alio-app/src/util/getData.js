@@ -7,7 +7,5 @@ export const getData = async (value, callback) => {
     })).json();
 
     callback(data);
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 };

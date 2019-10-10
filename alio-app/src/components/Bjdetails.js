@@ -1,112 +1,284 @@
 /* eslint-disable import/first */
 import Chart from "react-google-charts";
 import React, { Component } from "react";
-import { fakeData } from "../sub_data";
-import { afreecaFakedata } from "../afreeca_moca";
-import { Table, Button } from "antd";
+import { Table, Button, Avatar, Icon } from "antd";
 const { Column } = Table;
 import { getData } from "../util/getData";
-//import * as XLSX from "xlsx";
 
 class Bjdetails extends Component {
-  state = {
-    bjinfo: []
-  };
-  async componentDidMount() {
-    await getData("main/", data => this.setState({ bjinfo: data }));
+  constructor(props) {
+    super(props);
+    this.state = {
+      bjinfo: [],
+      bjmain: [],
+      gapsub: [],
+      totalresult: [],
+      bjFilterInfo: [
+        {
+          bjname: "",
+          bjimg: "",
+          signup: "",
+          bjabout: ""
+        },
+        {
+          bjname: "",
+          bjimg: "",
+          signup: "",
+          bjabout: ""
+        },
+        {
+          bjname: "",
+          bjimg: "",
+          signup: "",
+          bjabout: ""
+        }
+      ]
+    };
   }
-  render(props) {
-    console.log(this.props.match.params.id);
-    let userName = this.props.match.params.id;
-    console.log("Hi Bjdetail", fakeData);
-    console.log("bjdetail: this.state", this.state);
-    var resultarr = [];
-    for (let i = 0; i < fakeData.length; i++) {
-      if (fakeData[i]["user_name"] === userName)
-        resultarr.push({
-          view: fakeData[i]["afreeca_sub"],
-          image: fakeData[i]["image"]
-        });
+
+  bjDataFilter() {
+    let bjinfo = this.state.bjinfo;
+    let bjmain = this.state.bjmain;
+    let bjFilterarr = [];
+    let bjFilterInfo = [];
+    let bjFilterPlatform = {
+      PlatfromName: "PlatfromName",
+      twitch_id: "",
+      youtube_id: "",
+      afreeca_id: ""
+    };
+
+    let bjFilterLike = {
+      PlatfromName: "Like",
+      twitch_id: "",
+      youtube_id: "",
+      afreeca_id: ""
+    };
+    let bjFilterunLike = {
+      PlatfromName: "unLike",
+      twitch_id: "",
+      youtube_id: "",
+      afreeca_id: ""
+    };
+    let bjFilterView = {
+      PlatfromName: "ViewCount",
+      twitch_id: "",
+      youtube_id: "",
+      afreeca_id: ""
+    };
+    var gapsub = [["Subscribe"]];
+
+    for (let j = 0; j < bjmain.length; j++) {
+      if (bjmain[j]["P_userkey"] === this.props.match.params.id) {
+        if (bjmain[j]["P_name"] === "twitch") {
+          let fiveSub = bjmain[j]["Sub"].slice(0, 5);
+          for (let m = 0; m < fiveSub.length; m++) {
+            let tempArr = [fiveSub[m]["created_at"]];
+            gapsub.push(tempArr);
+          }
+          gapsub[0].push(bjmain[j]["P_name"]);
+          for (let n = 0; n < fiveSub.length; n++) {
+            gapsub[n + 1].push(fiveSub[n]["S_count"]);
+          }
+        }
+
+        if (bjmain[j]["P_name"] === "youtube") {
+          let fiveSub = bjmain[j]["Sub"].slice(0, 5);
+          gapsub[0].push(bjmain[j]["P_name"]);
+          for (let n = 0; n < fiveSub.length; n++) {
+            gapsub[n + 1].push(fiveSub[n]["S_count"]);
+          }
+        }
+
+        if (bjmain[j]["P_name"] === "afreeca") {
+          let fiveSub = bjmain[j]["Sub"].slice(0, 5);
+          gapsub[0].push(bjmain[j]["P_name"]);
+          for (let n = 0; n < fiveSub.length; n++) {
+            gapsub[n + 1].push(fiveSub[n]["S_count"]);
+          }
+        }
+      }
+      this.setState({
+        gapsub
+      });
+      var bjFilterSub = {
+        PlatfromName: "Subscribe",
+        twitch_id: this.state.gapsub[5][1],
+        youtube_id: "",
+        afreeca_id: this.state.gapsub[5][2]
+      };
     }
-    // for(let j = 0; j < afreecaFakedata.length; j++){
-    //   if(afreecaFakedata[j][])
-    // }
+
+    for (let i = 0; i < bjinfo.length; i++) {
+      if (this.state.bjinfo[i]["P_userkey"] === this.props.match.params.id) {
+        bjFilterarr.push(this.state.bjinfo[i]);
+      }
+    }
+    for (let k = 0; k < bjFilterarr.length; k++) {
+      let bjinfoObj = {
+        bjname: bjFilterarr[k]["User"][0]["U_name"],
+        bjimg: bjFilterarr[k]["User"][0]["U_img"],
+        signup: bjFilterarr[k]["User"][0]["U_sudate"],
+        bjabout: bjFilterarr[k]["User"][0]["U_info"]
+      };
+      bjFilterInfo.push(bjinfoObj);
+      this.setState({
+        bjFilterInfo
+      });
+
+      let total_len = bjFilterarr[k]["Total"].length - 1;
+      if (bjFilterarr[k]["P_name"] === "twitch") {
+        bjFilterPlatform["twitch_id"] = bjFilterarr[k]["User"][0]["U_name"];
+        bjFilterLike["twitch_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_like_count"];
+        bjFilterunLike["twitch_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_unlike_count"];
+        bjFilterView["twitch_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_view_count"];
+      } else if (bjFilterarr[k]["P_name"] === "youtube") {
+        bjFilterPlatform["youtube_id"] = bjFilterarr[k]["User"][0]["U_name"];
+        bjFilterLike["youtube_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_like_count"];
+        bjFilterunLike["youtube_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_unlike_count"];
+        bjFilterView["youtube_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_view_count"];
+      } else if (bjFilterarr[k]["P_name"] === "afreeca") {
+        bjFilterPlatform["afreeca_id"] = bjFilterarr[k]["User"][0]["U_name"];
+        bjFilterLike["afreeca_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_like_count"];
+        bjFilterunLike["afreeca_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_unlike_count"];
+        bjFilterView["afreeca_id"] =
+          bjFilterarr[k]["Total"][total_len]["T_view_count"];
+      }
+    }
+    this.setState({
+      totalresult: [
+        bjFilterPlatform,
+        bjFilterLike,
+        bjFilterunLike,
+        bjFilterView,
+        bjFilterSub
+      ]
+    });
+  }
+
+  async componentDidMount() {
+    await getData("BJ/", bjinfo => this.setState({ bjinfo }));
+    await getData("main/", bjmain => this.setState({ bjmain }));
+    this.bjDataFilter();
+  }
+
+  render() {
+    let userName = this.props.match.params.id;
+    var resultarr = [];
 
     const data = [
       {
         key: "1",
-        PlatfromName: " PlatfromName",
-        Rank: 1,
-        BJName: "Lake Park",
-        SubIncrease: "30"
+        PlatfromName: "PlatfromName",
+        youtube_id: "견자희유튜브",
+        afreeca_id: "견자희아프리카",
+        twitch_id: "견자희트위치"
       },
       {
         key: "1",
-        PlatfromName: " 1233",
-        Rank: 12,
-        BJName: "Lake",
-        SubIncrease: "30"
+        PlatfromName: "subscribe",
+        youtube_id: "20",
+        afreeca_id: "30",
+        twitch_id: "40"
       }
     ];
 
     const excelDownload = () => {
-      /* this line is only needed if you are not adding a script tag reference */
-
       if (typeof XLSX == "undefined") var XLSX = require("xlsx");
-      console.log(typeof XLSX);
-      console.log("XLSX를 통과!!!");
 
-      /* make the worksheet */
       var ws = XLSX.utils.json_to_sheet(data);
 
-      /* add to workbook */
       var wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "People");
 
-      /* generate an XLSX file */
       XLSX.writeFile(wb, "sheetjs.xlsx");
-      console.log("엑셀 눌렸다");
     };
 
-    console.log(resultarr);
     return (
       <div>
-        <span>
-          <img
-            src={resultarr[0]["image"]}
-            style={{ width: "150px", height: "150px" }}
-          />
-        </span>
+        <div
+          style={{
+            width: "400px",
+            height: "320px",
+            backgroundColor: "white",
+            display: "block"
+          }}
+        >
+          <span
+            style={{
+              width: "1000px",
+              margin: "30px",
+              padding: "20px",
+              display: "block",
+              backgroundColor: "aliceblue"
+            }}
+          >
+            <Avatar
+              size={150}
+              icon="user"
+              src={this.state.bjFilterInfo[0]["bjimg"]}
+            />
+            <p style={{ fontSize: "25px" }}>
+              {"BJ " + this.state.bjFilterInfo[0]["bjname"] + "님"}
+            </p>
+            <p>
+              <Icon type="history" />
+              {" twitch 개설일" + this.state.bjFilterInfo[0]["signup"]}
+            </p>
+            <p>
+              <Icon type="history" />
+              {this.state.bjFilterInfo[1] !== undefined &&
+                " afreeca 개설일" + this.state.bjFilterInfo[1]["signup"]}
+            </p>
+            <p>
+              <Icon type="heart" /> {this.state.bjFilterInfo[0]["bjabout"]}
+            </p>
+            <p>
+              <Icon type="heart" />{" "}
+              {this.state.bjFilterInfo[1] !== undefined &&
+                this.state.bjFilterInfo[1]["bjabout"]}
+            </p>
+          </span>
+        </div>
         <Chart
-          width={"400px"}
-          height={"200px"}
+          width={"90%"}
+          height={"350px"}
           chartType="Line"
           loader={<div>Loading Chart</div>}
-          data={[
-            ["Subscribe", "afreeca", "twitch", "youtube"],
-            ["1월28일", 80.8, 41.8, 20.1],
-            ["1월29일", 69.5, 32.4, 32],
-            ["1월30일", 57, 25.7, 23],
-            ["1월31일", 18.8, 10.5, 45],
-            ["2월01일", 17.6, 10.4, 65],
-            ["2월02일", 17.6, 10.4, 28]
-          ]}
+          data={this.state.gapsub}
           options={{
             chart: {
-              title: userName + "Subscribe"
+              title: this.state.bjFilterInfo[0]["bjname"] + "Subscribe"
             }
           }}
           rootProps={{ "data-testid": "1" }}
+          style={{
+            padding: "50px 0 50px 0",
+            marginLeft: "20px",
+            borderTop: "1px solide black"
+          }}
         />
-        <div>
-          <Table dataSource={data}>
+        <div style={{ marginTop: "50px" }}>
+          <Table dataSource={this.state.totalresult}>
             <Column title="" dataIndex="PlatfromName" key="PlatfromName" />
-            <Column title="Youtube" dataIndex="Rank" key="Rank" />
-            <Column title="Afreeca" dataIndex="BJName" key="BJName" />
-            <Column title="Twitch" dataIndex="SubIncrease" key="SubIncrease" />
+            <Column title="Youtube" dataIndex="youtube_id" key="youtube_id" />
+            <Column title="Afreeca" dataIndex="afreeca_id" key="afreeca_id" />
+            <Column title="Twitch" dataIndex="twitch_id" key="twitch_id" />
           </Table>
         </div>
-        <Button onClick={excelDownload}>Excel Download</Button>
+
+        <Button onClick={excelDownload}>
+          <Icon type="file-excel" theme="twoTone" />
+          Excel Download
+        </Button>
       </div>
     );
   }
