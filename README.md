@@ -1,29 +1,37 @@
-fancim - codestates 프로젝트
+# Fancim Crawler
 
-fancim BJ DATA 크롤링
+## 프로젝트 소개
 
-이기훈, 이영희, 한단비, 황종옥
+일리오라는 기업과 협업한 프로젝트입니다. 유튜브, 트위치, 아프리카를 크롤링하여 데이터를 수집해 일리오에 등록된 BJ들의 흥망성쇠를 나타내는 프로젝트입니다.
 
-✨(sparkles): 새로운 컴포넌트, 기능 추가
+## Start
 
-📝(pencil): markdown 파일 등 수정
+```
+npm install
+```
 
-🙈(see_no_evil): .gitignore 추가/수정
+## Stacks
 
-💄(lipstick): UI 수정/추가
+- Javascript
+- React.js
+- Antdesign
+- Python
+- Django
+- Mysql
+- Selenium
 
-🚧(construction): 작업 진행 중
+## 시연영상
 
-🎨(art): js 수정
+front 영상
 
-🔥(fire): 코드 삭제
+![front_crawler](https://media.giphy.com/media/MCiPUYrXKP8nHfiiV2/giphy.gif)
 
-🐛(bug): 버그 수정
+back 영상
 
-➕(heavy_plus_sign): 디펜던시 추가
+![back_crawler1](https://media.giphy.com/media/MCiPUYrXKP8nHfiiV2/giphy.gif)
 
-➖(heavy_minus_sign): 디펜던시 삭제
+![back_crawler1](https://media.giphy.com/media/JohI8SjDfRtcgsEFEQ/giphy.gif)
 
-💩(poop): 앞으로 수정해야 할 나쁜 코드!
+## Release History
 
-👌(ok_hand): 코드 리뷰 후 코드 수정
+- 0.1.0 (첫 배포)
