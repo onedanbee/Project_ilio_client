@@ -28,7 +28,7 @@ front 영상
 
 back 영상
 
-![back_crawler1](https://media.giphy.com/media/MCiPUYrXKP8nHfiiV2/giphy.gif)
+![back_crawler1](https://media.giphy.com/media/RjkpkytBKej9CTiaMB/giphy.gif)
 
 ![back_crawler1](https://media.giphy.com/media/JohI8SjDfRtcgsEFEQ/giphy.gif)
 
